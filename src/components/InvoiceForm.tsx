@@ -8,7 +8,7 @@ export default function InvoiceForm({ onGenerate }: { onGenerate: (data: Invoice
     clientEmail: "",
     description: "",
     amount: "",
-    type: "invoice",
+    type: "invoice"
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -20,7 +20,7 @@ export default function InvoiceForm({ onGenerate }: { onGenerate: (data: Invoice
     onGenerate({
       ...form,
       amount: parseFloat(form.amount),
-      date: new Date().toLocaleDateString(),
+      date: new Date().toLocaleDateString()
     });
   };
 

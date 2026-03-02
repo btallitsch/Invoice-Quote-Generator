@@ -2,8 +2,7 @@ import "./globals.css";
 import React from "react";
 
 export const metadata = {
-  title: "Lite Invoice & Quote Generator",
-  description: "Simple invoice and quote generator for small businesses",
+  title: "Invoice & Quote Generator"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -6,7 +6,7 @@ import jsPDF from "jspdf";
 export default function InvoicePreview({ data }: { data: InvoiceData }) {
   const downloadPDF = () => {
     const doc = new jsPDF();
-    doc.text(`${data.type.toUpperCase()}`, 10, 10);
+    doc.text(data.type.toUpperCase(), 10, 10);
     doc.text(`Client: ${data.clientName}`, 10, 20);
     doc.text(`Email: ${data.clientEmail}`, 10, 30);
     doc.text(`Description: ${data.description}`, 10, 40);
