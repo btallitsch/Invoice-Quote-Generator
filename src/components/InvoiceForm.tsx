@@ -1,15 +1,22 @@
 "use client";
+
 import React, { useState } from "react";
 import { InvoiceData, InvoiceType } from "@/types";
 
-export default function InvoiceForm({ onGenerate }: { onGenerate: (data: InvoiceData) => void }) {
-  const [form, setForm] = useState<{
-    clientName: string;
-    clientEmail: string;
-    description: string;
-    amount: string;
-    type: "invoice" | "quote";
-  }>({
+type FormState = {
+  clientName: string;
+  clientEmail: string;
+  description: string;
+  amount: string; // string in form, converted to number on submit
+  type: InvoiceType;
+};
+
+interface Props {
+  onGenerate: (data: InvoiceData) => void;
+}
+
+export default function InvoiceForm({ onGenerate }: Props) {
+  const [form, setForm] = useState<FormState>({
     clientName: "",
     clientEmail: "",
     description: "",
@@ -21,34 +28,77 @@ export default function InvoiceForm({ onGenerate }: { onGenerate: (data: Invoice
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-  
+
     if (name === "type") {
-      setForm({ ...form, type: value as "invoice" | "quote" });
+      setForm((prev) => ({
+        ...prev,
+        type: value as InvoiceType,
+      }));
     } else {
-      setForm({ ...form, [name]: value });
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onGenerate({
-      ...form,
+
+    const invoiceData: InvoiceData = {
+      clientName: form.clientName,
+      clientEmail: form.clientEmail,
+      description: form.description,
       amount: parseFloat(form.amount),
-      date: new Date().toLocaleDateString()
-    });
+      type: form.type,
+      date: new Date().toLocaleDateString(),
+    };
+
+    onGenerate(invoiceData);
   };
 
   return (
     <form className="card" onSubmit={handleSubmit}>
       <h2>Create Invoice / Quote</h2>
-      <input name="clientName" placeholder="Client Name" onChange={handleChange} required />
-      <input name="clientEmail" placeholder="Client Email" onChange={handleChange} required />
-      <input name="description" placeholder="Service Description" onChange={handleChange} required />
-      <input name="amount" type="number" placeholder="Amount" onChange={handleChange} required />
-      <select name="type" onChange={handleChange}>
+
+      <input
+        name="clientName"
+        placeholder="Client Name"
+        value={form.clientName}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="clientEmail"
+        placeholder="Client Email"
+        value={form.clientEmail}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="description"
+        placeholder="Service Description"
+        value={form.description}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        name="amount"
+        type="number"
+        placeholder="Amount"
+        value={form.amount}
+        onChange={handleChange}
+        required
+      />
+
+      <select name="type" value={form.type} onChange={handleChange}>
         <option value="invoice">Invoice</option>
         <option value="quote">Quote</option>
       </select>
+
       <button type="submit">Generate</button>
     </form>
   );
