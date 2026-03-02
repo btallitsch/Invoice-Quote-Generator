@@ -3,16 +3,30 @@ import React, { useState } from "react";
 import { InvoiceData } from "@/types";
 
 export default function InvoiceForm({ onGenerate }: { onGenerate: (data: InvoiceData) => void }) {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    clientName: string;
+    clientEmail: string;
+    description: string;
+    amount: string;
+    type: "invoice" | "quote";
+  }>({
     clientName: "",
     clientEmail: "",
     description: "",
     amount: "",
-    type: "invoice"
+    type: "invoice",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+  
+    if (name === "type") {
+      setForm({ ...form, type: value as "invoice" | "quote" });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
