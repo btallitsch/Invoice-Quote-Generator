@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { InvoiceData } from "@/types";
+import { InvoiceData, InvoiceType } from "@/types";
 
 export default function InvoiceForm({ onGenerate }: { onGenerate: (data: InvoiceData) => void }) {
   const [form, setForm] = useState<{
